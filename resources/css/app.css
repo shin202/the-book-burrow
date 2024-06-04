@@ -1,0 +1,106 @@
+@import "primeicons/primeicons.css";
+@import "flag-icons/css/flag-icons.min.css";
+@import "vue-advanced-cropper/dist/style.css";
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+@import "base.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.v-enter-active,
+.v-leave-active {
+    transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+    position: absolute;
+    opacity: 0;
+}
+
+@keyframes clippath {
+    0%, 100% {
+        clip-path: inset(0 0 98% 0);
+    }
+    25% {
+        clip-path: inset(0 98% 0 0);
+    }
+    50% {
+        clip-path: inset(98% 0 0 0);
+    }
+    75% {
+        clip-path: inset(0 0 0 98%);
+    }
+}
+
+.form {
+    @apply bg-surface-0 shadow-md rounded-lg px-4 py-6 flex flex-col space-y-4;
+}
+
+.form__group {
+    @apply flex flex-col space-y-1.5;
+}
+
+.form__label {
+    @apply text-sm lg:text-base font-medium;
+}
+
+.form__label--required {
+    @apply relative;
+}
+
+.form__label--required::after {
+    content: '*';
+    @apply text-red-500 text-sm absolute top-0 pl-0.5;
+}
+
+.form__label--optional {
+    @apply relative;
+}
+
+.form__label--optional::after {
+    content: '(optional)';
+    @apply text-surface-500 text-sm pl-0.5 font-light;
+}
+
+.form__feedback {
+    @apply text-red-500 line-clamp-1 text-xs;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+
+.slide-from-top-enter-active,
+.slide-from-top-leave-active {
+    transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.slide-from-top-enter-from,
+.slide-from-top-leave-to {
+    transform: translateY(-100%);
+    opacity: 0;
+}
+
+.slide-from-right-enter-active,
+.slide-from-right-leave-active {
+    transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.slide-from-right-enter-from,
+.slide-from-right-leave-to {
+    transform: translateX(100%);
+    opacity: 0;
+}
+
+.ck-editor__editable_inline:not(.ck-comment__input *) {
+    height: 200px;
+    overflow-y: auto;
+}
