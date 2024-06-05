@@ -29,7 +29,7 @@ const startCountdown = () => {
         if (countDown.value > 0) {
             countDown.value--;
         } else {
-            window.location.href = route("home.index");
+            window.location.href = route("landing.index");
         }
     }, 1000);
 };
@@ -78,7 +78,8 @@ onMounted(() => {
                     </p>
                 </div>
                 <InertiaLink :href="route('landing.index')" class="btn btn-primary">
-                    <Button class="text-primary-800 hover:text-primary-700 font-bold" icon="pi pi-arrow-right" iconPos="right" label="Back to Home"
+                    <Button class="text-primary-800 hover:text-primary-700 font-bold" icon="pi pi-arrow-right"
+                            iconPos="right" label="Back to Home"
                             text/>
                 </InertiaLink>
             </div>

@@ -10,6 +10,7 @@ export default {
 import {computed, ref} from "vue";
 import {Head, router, useForm, usePage} from "@inertiajs/vue3";
 import {useToast} from "primevue/usetoast";
+import {getCountries} from "iso-3166-1-alpha-2";
 
 import Avatar from "primevue/avatar";
 import Button from "primevue/button";
@@ -20,11 +21,14 @@ import RadioButton from "primevue/radiobutton";
 import Calendar from "primevue/calendar";
 import Panel from "primevue/panel";
 import Message from "primevue/message";
+import Dropdown from "primevue/dropdown";
+import Toast from "primevue/toast";
 import {Cropper, CircleStencil} from "vue-advanced-cropper";
+
+import UserLayout from "@/Layouts/UserLayout.vue";
 
 import {UserGenderEnum, UserStatusEnum} from "@/common/enums";
 import {PageProps, User} from "@/types";
-import UserLayout from "@/Layouts/UserLayout.vue";
 
 const page = usePage<PageProps<any>>();
 const toast = useToast();
@@ -83,7 +87,7 @@ const personalInfoForm = useForm({
     lastName: user.value.profile?.last_name,
     gender: user.value.profile?.gender,
     dateOfBirth: user.value.profile?.date_of_birth,
-    nationality: user.value.profile?.nationality,
+    country: user.value.profile?.country,
 });
 
 const onTogglePersonalInfoMenu = (event: any) => {
@@ -137,9 +141,16 @@ const onSavePersonalInfo = () => {
         last_name: personalInfoForm.lastName,
         gender: personalInfoForm.gender,
         date_of_birth: personalInfoForm.dateOfBirth ? new Date(personalInfoForm.dateOfBirth).toISOString().split("T")[0] : null,
-        nationality: personalInfoForm.nationality,
+        nationality: personalInfoForm.country,
+    }, {
+        onSuccess: () => {
+            isDisabledPersonalInfo.value = true;
+            toast.add({severity: "success", summary: "Success", detail: "Your personal information has been updated."});
+        },
+        onError: () => {
+            isDisabledPersonalInfo.value = true;
+        }
     });
-    isDisabledPersonalInfo.value = true;
 };
 
 const onResetPersonalInfo = () => {
@@ -147,14 +158,23 @@ const onResetPersonalInfo = () => {
     personalInfoForm.lastName = user.value?.profile?.last_name;
     personalInfoForm.gender = user.value?.profile?.gender;
     personalInfoForm.dateOfBirth = user.value?.profile?.date_of_birth;
-    personalInfoForm.nationality = user.value?.profile?.nationality;
+    personalInfoForm.country = user.value?.profile?.country;
 };
 
-router.on("finish", () => {
-    if (page.props.toast?.message) {
-        toast.add({severity: page.props.toast.severity, summary: page.props.toast.message, life: 3000});
-    }
-});
+const onResendEmailVerification = () => {
+    const url = route("verification.resend");
+
+    router.post(url, {}, {
+        onSuccess: () => {
+            toast.add({
+                severity: "info",
+                summary: "Info",
+                detail: "We have sent you a verification email.",
+                life: 3000
+            });
+        },
+    });
+};
 </script>
 
 <template>
@@ -212,7 +232,8 @@ router.on("finish", () => {
                 <Message v-if="user.status === UserStatusEnum.INACTIVE" :closable="false" severity="warn">
                 <span>
                     <span>Your account is not verified. Please check your email to verify your account.</span>
-                    <a class="text-blue-500 hover:underline hover:text-blue-600" href="#"> Resend email verification</a>
+                    <a class="text-blue-500 hover:underline hover:text-blue-600 cursor-pointer"
+                       @click="onResendEmailVerification">Resend email verification</a>
                 </span>
                 </Message>
             </div>
@@ -285,12 +306,15 @@ router.on("finish", () => {
                         </div>
                         <div>
                             <div class="flex items-center space-x-2 relative">
-                                <label for="nationality">Nationality:</label>
+                                <label for="country">Country:</label>
                                 <Transition>
                                     <span v-if="isDisabledPersonalInfo"
-                                          v-text="personalInfoForm.nationality ?? 'None'"/>
-                                    <InputText v-else id="nationality" v-model="personalInfoForm.nationality"
-                                               class="flex-1" placeholder="Enter your nationality"/>
+                                          v-text="personalInfoForm.country ?? 'None'"/>
+                                    <Dropdown v-else v-model="personalInfoForm.country" :options="getCountries()"
+                                              :virtualScrollOptions="{itemSize: 40}"
+                                              class="flex-1"
+                                              filter
+                                              inputId="country" placeholder="Enter your country"/>
                                 </Transition>
                             </div>
                             <small class="text-red-500" v-text="page.props.errors.nationality"/>

@@ -74,7 +74,7 @@ window.Echo.private(`orders.${props.order.order_number}`)
     <UserLayout>
         <div class="mt-4 px-6 flex-col gap-4 w-full">
             <h1 class="font-bold text-2xl">Order #{{ order.order_number }}</h1>
-            <div class="mt-4">
+            <div class="mt-4 flex flex-col">
                 <div class="flex flex-wrap justify-between gap-16">
                     <div class="flex-1 bg-primary-300/50 px-6 py-4 rounded-lg divide-y">
                         <h2 class="font-bold text-lg text-primary-800">Order Summary</h2>
@@ -192,10 +192,10 @@ window.Echo.private(`orders.${props.order.order_number}`)
                         </Timeline>
                     </div>
                 </div>
-                <div class="mt-8">
+                <div class="my-8 flex items-center gap-2 self-end">
                     <Button icon="pi pi-times" label="Cancel Order" severity="danger"/>
-                    <Button class="ml-4" icon="pi pi-money-bill" label="Cancel & Refund" severity="danger"/>
-                    <Button class="ml-4" icon="pi pi-undo" label="Request a return" severity="secondary"/>
+                    <Button icon="pi pi-money-bill" label="Cancel & Refund" severity="danger"/>
+                    <Button icon="pi pi-undo" label="Request a return" severity="secondary"/>
                 </div>
             </div>
         </div>

@@ -58,7 +58,7 @@ export interface Profile {
     last_name: string;
     gender: UserGenderEnum;
     date_of_birth: Date | string;
-    nationality: string;
+    country: string;
 }
 
 export interface Book {
